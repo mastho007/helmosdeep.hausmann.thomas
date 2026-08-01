@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="resources/libs/archunit-1.4.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/archunit-junit5-1.4.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/archunit-junit5-api-1.4.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/archunit-junit5-engine-1.4.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/archunit-junit5-engine-api-1.4.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/log4j-api-2.18.0.jar"/>
+	<classpathentry kind="lib" path="resources/libs/log4j-core-2.18.0.jar"/>
+	<classpathentry kind="lib" path="resources/libs/slf4j-api-2.0.17.jar"/>
+	<classpathentry kind="lib" path="resources/libs/log4j-slf4j2-impl-3.0.0-beta2.jar"/>
+	<classpathentry kind="lib" path="resources/libs/fest-reflect-1.2.jar"/>
+	<classpathentry kind="lib" path="resources/libs/fest-swing-1.2.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/fest-swing-junit-1.2.1.jar"/>
+	<classpathentry kind="lib" path="resources/libs/fest-assert-1.2.jar"/>
+	<classpathentry kind="lib" path="resources/libs/fest-util-1.1.3.jar"/>
+	<classpathentry kind="lib" path="resources/libs/ai-engine-v1.3.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
