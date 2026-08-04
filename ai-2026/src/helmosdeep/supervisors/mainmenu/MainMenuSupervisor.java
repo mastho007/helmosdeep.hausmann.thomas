@@ -95,7 +95,7 @@ public class MainMenuSupervisor implements MainMenuListener {
 	 */
 	@Override
 	public void onItemSelected(int itemIndex) {
-		Contract.require(0 <= itemIndex && itemIndex <= 1, "Arg. itemIndex in [0, 1] attendu. Reçu " + itemIndex);
+		Contract.require(0 <= itemIndex && itemIndex <= 2, "Arg. itemIndex in [0, 2] attendu. Reçu " + itemIndex);
 
 		// si l'utilisateur est dans le menu principale
 		if (!this.gameOption.isModeOption()) {
@@ -104,7 +104,8 @@ public class MainMenuSupervisor implements MainMenuListener {
 
 		} else {
 			// si l'utilisateur est dans le mode option
-
+			manageSelectionOptionMenu(itemIndex);
+			
 		}
 
 	}
@@ -126,8 +127,10 @@ public class MainMenuSupervisor implements MainMenuListener {
 		if (itemIndex == NEW_GAME_ITEM) {
 
 			// l'objet HelmoDeepGame est créé depuis la factory
-			gameFactory.create();
+			gameFactory.create(this.gameOption);
 			// on récupère l'objet GameOption
+			
+			
 
 			view.goTo(ViewsId.PLAY_GAME);
 
@@ -158,18 +161,35 @@ public class MainMenuSupervisor implements MainMenuListener {
 	 * 
 	 * 
 	 */
-	private void manageSelectionOptionMenu() {
+	private void manageSelectionOptionMenu(int itemindex) {
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		// si l'utilisateur appuie sur "Unités lourdes"
+		if (itemindex == OPTION_HEAVY_UNIT) {
+
+			// on change l'état de l'option
+			this.gameOption.changeOptionHeavy();
+
+			// on affiche la mise a jour à l'écran
+			onViewEntered();
+
+		} else if (itemindex == OPTION_LIGHT_UNIT) {
+			// si l'utilisateur appuie sur "Unités légères"
+
+			// on change l'état de l'option
+			this.gameOption.changeOptionLight();
+
+			onViewEntered();
+
+		} else if (itemindex == RETURN_MAIN_MENU) {
+			// si l'utilisateur appuie sur "Retour au menu principal"
+
+			// on passe le mode option à false
+			this.gameOption.changeModeOptions();
+
+			onViewEntered();
+
+		}
+
 	}
 
 }

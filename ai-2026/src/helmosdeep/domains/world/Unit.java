@@ -23,12 +23,17 @@ public final class Unit {
 	 * Unité représentant l'absence d'unité connue ou valide, utilisée comme valeur
 	 * par défaut ou de repli.
 	 */
-	public static final Unit UNKNOWN = new Unit("?", UnitType.UNKNOWN);
+	public static final Unit UNKNOWN = new Unit("?", UnitType.UNKNOWN, new StandardLightMovementStrategy());
 
 	private final UnitType type;
 	private final String name;
 	private boolean moved;
 	private int pow;
+	
+	//on déclare les points consommé pour l'unité propre
+	private int mvtPointsConsumed;
+	//l'interface qui vas gérer les options choisie du jeu
+	private final MovementStrategy strategy;
 
 	/**
 	 * Crée une nouvelle unité avec le nom et le type donnés.
@@ -38,13 +43,16 @@ public final class Unit {
 	 *
 	 * @param name le nom de l'unité
 	 * @param type le type de l'unité, déterminant sa force et sa mobilité
+	 * @param strategy concerne les options choisie par l'utilisateur à appliquer
 	 * @throws NullPointerException si {@code name} ou {@code type} est {@code null}
 	 */
-	public Unit(String name, UnitType type) {
+	public Unit(String name, UnitType type, MovementStrategy strategy) {
 		this.type = Objects.requireNonNull(type,  "Arg. type != null attendu");
 		this.name = Objects.requireNonNull(name, "Arg. name != null attendu");
+		this.strategy = Objects.requireNonNull(strategy, "Arg. strategy != null attendu");
 		this.moved = false;
 		this.pow = 0;
+		this.mvtPointsConsumed = 0;
 	}
 
 	/**
@@ -83,7 +91,37 @@ public final class Unit {
 	public int getMvt() {
 		return this.type.getMvt();
 	}
+	
+	/**
+	 * Calcule le cout pour se déplacer sur une tuile via la bonne stratégie.
+	 * @param tile la tuile de destination
+	 * @return un entier qui correspond au coût de déplacement.
+	 */
+	public int getMoveCostFor(Tile tile) {
+		
+		return this.strategy.calculateMovementCost(tile);
+	}
+	
 
+	/**
+	 * Récupère le nombre de points consommé 
+	 * @return un entier représentant le nombre de points consommé par l'unité
+	 */
+	public int getMvtPointsConsumed() {
+		
+		return this.mvtPointsConsumed;
+	}
+	
+	/**
+	 * Ajoute à l'attribut de points consommé pour l'unité 
+	 * @param points le nombre de points à ajouter à cet attribut.
+	 */
+	public void addMvtPointsConsumed(int points) {
+		
+		this.mvtPointsConsumed += points;
+	}
+	
+	
 	/**
 	 * Retourne la puissance d'attaque courante de cette unité.
 	 *

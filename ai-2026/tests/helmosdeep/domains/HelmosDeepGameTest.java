@@ -25,14 +25,14 @@ class HelmosDeepGameTest {
 	void setup() {
 		factory = new HelmosDeepGameFactory();
 		
-		factory.create("level-a");
+		factory.create("level-a", new GameOption());
 		
 		this.game = factory.getLastGame();
 	}
 	
 	@Test
 	void should_allow_to_consume_tiles_and_units() {
-		factory.create();
+		factory.create(new GameOption());
 		
 		this.game = factory.getLastGame();
 		

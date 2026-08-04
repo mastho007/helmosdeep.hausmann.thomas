@@ -18,7 +18,7 @@ public final class MiddleEarthReader {
 	/**
 	 * Lit le contenu du fichier pour en extraire une nouvelle instance de la terre du milieu.
 	 * */
-	void loadFromFile(String filePath) {
+	void loadFromFile(String filePath, GameOption gameOption) {
 		var rawContent = TxtFileReader.getContent(filePath);
 		Contract.check(rawContent != null && !rawContent.isBlank(), "rawContent should be not blank");
 		rows = Arrays.asList(rawContent.split("\n"));
@@ -31,8 +31,8 @@ public final class MiddleEarthReader {
 		
 		armies = new ArmyList(Army.of(Belligerent.MORDOR), Army.of(Belligerent.MANKIND));
 		
-		parseMordor();
-		parseMankind();
+		parseMordor(gameOption);
+		parseMankind(gameOption);
 	}
 
 	private void parseDimensions(String firstRow) {
@@ -63,7 +63,7 @@ public final class MiddleEarthReader {
 		};
 	}
 	
-	private void parseMordor() {
+	private void parseMordor(GameOption gameOption) {
 		for(var row = rowsCount; row < rows.size(); ++row) {
 			for(var col = 0; col < colsCount; ++col) {
 				var coord = Coordinate.coord(row - rowsCount - 2, col);
@@ -85,7 +85,7 @@ public final class MiddleEarthReader {
 		};
 	}
 	
-	private void parseMankind() {
+	private void parseMankind(GameOption gameOption) {
 		for(var row = rowsCount; row < rows.size(); ++row) {
 			for(var col = 0; col < colsCount; ++col) {
 				var coord = Coordinate.coord(row - rowsCount - 2, col);

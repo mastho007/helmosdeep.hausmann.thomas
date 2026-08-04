@@ -12,8 +12,8 @@ public class HelmosDeepGameFactory implements GameFactory, GameProvider {
 	private Optional<HelmosDeepGame> lastGame = Optional.empty();
 	
 	@Override
-	public void create(String level) {
-		reader.loadFromFile("resources/maps/%s.txt".formatted(level));
+	public void create(String level, GameOption gameOption) {
+		reader.loadFromFile("resources/maps/%s.txt".formatted(level), gameOption);
 		
 		lastGame = Optional.of(HelmosDeepGame.ofBattlefieldAndArmy(reader.getBattefield(), reader.getArmies()));
 	}
