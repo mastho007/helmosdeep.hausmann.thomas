@@ -85,13 +85,14 @@ public class MiddleEarth implements Iterable<Coordinate> {
 	 *        le déplacement est considéré comme impossible.
 	 * @param source la position de départ, doit faire partie de la carte.
 	 * @param destination la position d'arrivée, doit faire partie de la carte.
+	 * @param unit l'unité qui se déplace de la position source -> destination.
 	 * @return le coût minimal du déplacement de {@code source} vers {@code destination},
 	 *         ou {@code Integer.MAX_VALUE} si le déplacement est impossible avec le
 	 *         mouvement disponible.
 	 * @throws IllegalArgumentException si {@code source} ou {@code destination} ne fait
 	 *         pas partie de la carte.
 	 */
-	public int computeMoveCostFor(int movement, Coordinate source, Coordinate destination) {
+	public int computeMoveCostFor(int movement, Coordinate source, Coordinate destination, Unit unit) {
 		Contract.require(checkTileExistsAt(source) != Coordinate.NONE,
 				"%s ne fait pas partie de la carte".formatted(source));
 		Contract.require(checkTileExistsAt(destination) != Coordinate.NONE,
@@ -112,9 +113,10 @@ public class MiddleEarth implements Iterable<Coordinate> {
 		
 		for(var n : neighbors) {
 			if(n.distanceFrom(destination) <= distanceFromSource) {
-				int tileCost = getTileAt(n).getCost();
+				//on récupère le cout de la tuile selon les options choisie
+				int tileCost = unit.getMoveCostFor(getTileAt(n));
 				int movementLeft = movement - tileCost; // Garantit la fin de l'appel récursif
-				int cost = computeMoveCostFor(movementLeft, n, destination);
+				int cost = computeMoveCostFor(movementLeft, n, destination, unit);
 				minCost = min(minCost, cost, tileCost);
 			}
 		}

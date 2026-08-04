@@ -8,7 +8,7 @@ public class SpecialLightMovementStrategy extends MovementStrategy{
 
 	
 	@Override
-	boolean canMoveAfterAttack(Unit unit, Tile targetTile, int armyMvtAvailable) {
+	public boolean canMoveAfterAttack(Unit unit, Tile targetTile, int armyMvtAvailable) {
 		
 		int cost = calculateMovementCost(targetTile);
 		

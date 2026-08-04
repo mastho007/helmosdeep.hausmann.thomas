@@ -47,7 +47,7 @@ public abstract class MovementStrategy {
 	 * @return true si l'unité légère peut se déplacer une deuxième fois, false
 	 *         sinon
 	 */
-	boolean canMoveAfterAttack(Unit unite, Tile tuileCible, int mouvementDeLarmee) {
+	public boolean canMoveAfterAttack(Unit unite, Tile tuileCible, int mouvementDeLarmee) {
 
 		return false;
 	}

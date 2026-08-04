@@ -233,6 +233,7 @@ public final class Army implements TemplateResolvable {
 			}
 		}
 		
+		
 		unit.get().setPower(unitStr + alliesCount + term);
 	}
 

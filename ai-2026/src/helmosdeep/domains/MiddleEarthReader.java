@@ -7,104 +7,127 @@ import helmosdeep.util.*;
 
 /**
  * Instancie des objets MiddleEarth en lisant un fichier txt.
- * */
+ */
 public final class MiddleEarthReader {
 	private List<String> rows;
 	private int rowsCount;
 	private int colsCount;
 	private MiddleEarth battefield;
 	private ArmyList armies;
-	
+
 	/**
-	 * Lit le contenu du fichier pour en extraire une nouvelle instance de la terre du milieu.
-	 * */
+	 * Lit le contenu du fichier pour en extraire une nouvelle instance de la terre
+	 * du milieu.
+	 */
 	void loadFromFile(String filePath, GameOption gameOption) {
 		var rawContent = TxtFileReader.getContent(filePath);
 		Contract.check(rawContent != null && !rawContent.isBlank(), "rawContent should be not blank");
 		rows = Arrays.asList(rawContent.split("\n"));
-		
+
 		parseDimensions(rows.getFirst());
-		Contract.check(rows.size() == 1+rowsCount+1+rowsCount, "# lignes brutes attendues %d. # reçue %d".formatted( 1+rowsCount+1+rowsCount, rows.size()));
-		
+		Contract.check(rows.size() == 1 + rowsCount + 1 + rowsCount,
+				"# lignes brutes attendues %d. # reçue %d".formatted(1 + rowsCount + 1 + rowsCount, rows.size()));
+
 		battefield = MiddleEarth.create();
 		parseBattefield();
-		
+
 		armies = new ArmyList(Army.of(Belligerent.MORDOR), Army.of(Belligerent.MANKIND));
-		
+
 		parseMordor(gameOption);
 		parseMankind(gameOption);
 	}
 
 	private void parseDimensions(String firstRow) {
 		Contract.check(firstRow.strip().matches("\\d+\\s*:\\s*\\d+"), "First row should match [0-9]+:[0-9]+");
-		
-		rowsCount = Integer.parseInt(firstRow.substring(0,firstRow.indexOf(':')));
-		colsCount = Integer.parseInt(firstRow.substring(firstRow.indexOf(':')+1).strip());
+
+		rowsCount = Integer.parseInt(firstRow.substring(0, firstRow.indexOf(':')));
+		colsCount = Integer.parseInt(firstRow.substring(firstRow.indexOf(':') + 1).strip());
 	}
-	
+
 	private void parseBattefield() {
-	
-		for(var row = 1; row <= rowsCount; ++row) {
-			for(var col = 0; col < colsCount; ++col) {
+
+		for (var row = 1; row <= rowsCount; ++row) {
+			for (var col = 0; col < colsCount; ++col) {
 				var coord = Coordinate.coord(row - 1, col);
 				var tile = toTile(rows.get(row).charAt(col));
 				getBattefield().put(coord, tile);
 			}
 		}
-		
+
 	}
 
 	private Tile toTile(char tileAsChar) {
-		return switch(Character.toUpperCase(tileAsChar)) {
+		return switch (Character.toUpperCase(tileAsChar)) {
 		case 'L' -> Tile.LOWLAND;
 		case 'F' -> Tile.FOREST;
 		case 'M' -> Tile.MOUNTAIN;
-		default -> throw new IllegalArgumentException("Unknown tile symbol ["+tileAsChar+"]");
+		default -> throw new IllegalArgumentException("Unknown tile symbol [" + tileAsChar + "]");
 		};
 	}
-	
+
 	private void parseMordor(GameOption gameOption) {
-		for(var row = rowsCount; row < rows.size(); ++row) {
-			for(var col = 0; col < colsCount; ++col) {
+		for (var row = rowsCount; row < rows.size(); ++row) {
+			for (var col = 0; col < colsCount; ++col) {
 				var coord = Coordinate.coord(row - rowsCount - 2, col);
-				var unit = toMordoUnit(rows.get(row).charAt(col));
-				if(unit.isPresent()) {
+				var unit = toMordoUnit(rows.get(row).charAt(col), gameOption);
+				if (unit.isPresent()) {
 					getArmies().enroll(coord, unit.get(), Belligerent.MORDOR);
 				}
 			}
 		}
 	}
 
-	private Optional<Unit> toMordoUnit(char charAt) {
-		return switch(Character.toUpperCase(charAt)) {
-		case 'W' -> Optional.<Unit>of(new Unit("Wargs", UnitType.LIGHT));
-		case 'S' -> Optional.<Unit>of(new Unit("Sauron", UnitType.GENERAL));
-		case 'O' -> Optional.<Unit>of(new Unit("Orcs", UnitType.AVERAGE));
-		case 'T' -> Optional.<Unit>of(new Unit("Trolls", UnitType.HEAVY));
-		default  -> Optional.<Unit>empty();
+	private Optional<Unit> toMordoUnit(char charAt, GameOption gameOption) {
+		return switch (Character.toUpperCase(charAt)) {
+		case 'W' -> Optional.<Unit>of(new Unit("Wargs", UnitType.LIGHT, createStrategy(UnitType.LIGHT, gameOption)));
+
+		case 'S' ->
+			Optional.<Unit>of(new Unit("Sauron", UnitType.GENERAL, createStrategy(UnitType.GENERAL, gameOption)));
+		case 'O' -> Optional.<Unit>of(new Unit("Orcs", UnitType.AVERAGE, createStrategy(UnitType.AVERAGE, gameOption)));
+		case 'T' -> Optional.<Unit>of(new Unit("Trolls", UnitType.HEAVY, createStrategy(UnitType.HEAVY, gameOption)));
+		default -> Optional.<Unit>empty();
 		};
 	}
-	
+
+	private MovementStrategy createStrategy(UnitType type, GameOption gameOption) {
+
+		if (type == UnitType.LIGHT) {
+
+			return (gameOption.getOptionLight() == true) ? new SpecialLightMovementStrategy()
+					: new StandardLightMovementStrategy();
+
+		} else if (type == UnitType.HEAVY) {
+
+			return (gameOption.getOptionHeavy() == true) ? new SpecialHeavyMovementStrategy()
+					: new StandardHeavyMovementStrategy();
+		} else {
+
+			return new StandardLightMovementStrategy();
+
+		}
+
+	}
+
 	private void parseMankind(GameOption gameOption) {
-		for(var row = rowsCount; row < rows.size(); ++row) {
-			for(var col = 0; col < colsCount; ++col) {
+		for (var row = rowsCount; row < rows.size(); ++row) {
+			for (var col = 0; col < colsCount; ++col) {
 				var coord = Coordinate.coord(row - rowsCount - 2, col);
-				var unit = toMankindUnit(rows.get(row).charAt(col));
-				if(unit.isPresent()) {
+				var unit = toMankindUnit(rows.get(row).charAt(col), gameOption);
+				if (unit.isPresent()) {
 					getArmies().enroll(coord, unit.get(), Belligerent.MANKIND);
 				}
 			}
 		}
-		
+
 	}
 
-	private Optional<Unit> toMankindUnit(char charAt) {
-		return switch(Character.toUpperCase(charAt)) {
-		case 'R' ->  Optional.<Unit>of(new Unit("Rohirrim", UnitType.LIGHT));
-		case 'A' ->  Optional.<Unit>of(new Unit("Aragorn", UnitType.GENERAL));
-		case 'G' ->  Optional.<Unit>of(new Unit("Gondoriens", UnitType.AVERAGE));
-		case 'E' ->  Optional.<Unit>of(new Unit("Ents", UnitType.HEAVY));
-		default  ->  Optional.<Unit>empty();
+	private Optional<Unit> toMankindUnit(char charAt, GameOption gameOption) {
+		return switch (Character.toUpperCase(charAt)) {
+		case 'R' -> Optional.<Unit>of(new Unit("Rohirrim", UnitType.LIGHT, createStrategy(UnitType.LIGHT, gameOption)));
+		case 'A' -> Optional.<Unit>of(new Unit("Aragorn", UnitType.GENERAL, createStrategy(UnitType.GENERAL, gameOption)));
+		case 'G' -> Optional.<Unit>of(new Unit("Gondoriens", UnitType.AVERAGE , createStrategy(UnitType.AVERAGE, gameOption)));
+		case 'E' -> Optional.<Unit>of(new Unit("Ents", UnitType.HEAVY, createStrategy(UnitType.HEAVY, gameOption)));
+		default -> Optional.<Unit>empty();
 		};
 	}
 
