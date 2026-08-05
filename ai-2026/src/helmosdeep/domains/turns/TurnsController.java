@@ -19,6 +19,9 @@ public final class TurnsController implements TemplateResolvable {
 	
 	private final TurnSequence turns;
 	
+	//on conserve le stock des unités sélectionnées 
+	private SelectedUnitHistory selectedUnitHistory;
+	
 	public static TurnsController create(ArmyList armies) {
 		Objects.requireNonNull(armies);
 		Contract.require(armies.size() == 2, "Arg. armies doit avoir 2 éléments");
@@ -33,6 +36,10 @@ public final class TurnsController implements TemplateResolvable {
 		this.selectedPos = this.getActiveArmy().locateGeneral();
 		this.currentPos = selectedPos;
 		this.turns = TurnSequence.fromArmies(getActiveArmy(), getOtherArmy());
+		
+		//on instancie notre historique de sélection
+		this.selectedUnitHistory = new SelectedUnitHistory(this);
+		
 	}
 
 	public Army getActiveArmy() {
