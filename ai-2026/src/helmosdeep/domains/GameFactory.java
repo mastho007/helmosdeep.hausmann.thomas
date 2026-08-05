@@ -19,7 +19,7 @@ public interface GameFactory {
 	 * 
 	 */
 	default void create(GameOption gameOption) {
-		create("level-1", gameOption);
+		create("level-1-backup", gameOption);
 	}
 
 }

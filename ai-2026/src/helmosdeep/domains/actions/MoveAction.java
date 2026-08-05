@@ -88,31 +88,33 @@ public final class MoveAction implements Action {
 		final var activeUnit = turnsController.getUnitAt(from).get(); // INVARIANT : une unité est toujours sélectionnée
 		final var isPosFree = turnsController.getUnitAt(to).isEmpty();
 
-		mvtConsumed = middleEarth.computeMoveCostFor(turnsController.getMvtForActiveUnit(), from, to, activeUnit);
+		// on calcule les mouvements restants pour l'unité active, l'armée active -> le
+		// minimum des deux représente le mouvement restant
+		int unitMvtLeft = activeUnit.getMvt() - activeUnit.getMvtPointsConsumed();
+		int armyMvtLeft = turnsController.getMvtForActiveUnit();
+
+		int availableMvt = Math.min(unitMvtLeft, armyMvtLeft);
+
+		mvtConsumed = middleEarth.computeMoveCostFor(availableMvt, from, to, activeUnit);
 
 		final var isAccessible = 0 < mvtConsumed && mvtConsumed < Integer.MAX_VALUE;
 
-		// on vérifie si l'option sélectionné accepte un second déplacement
-		MovementStrategy strategy = activeUnit.getStrategy();
+		
+		// si la case de la coordonnée courante n'est pas vide OU
+		// que la case n'est pas accessible -> false
+		if (!isPosFree || !isAccessible) {
 
-		boolean isAllowedToMove = activeUnit.isAllowedToMove();
-		// on regarde 2 cas si l'unité à déja attaquée
-		if (activeUnit.getPow() == 0) {
-			// l'unité n'a pas encore attaquée
-			isAllowedToMove = activeUnit.isAllowedToMove();
-
-			return isPosFree && isAccessible && isAllowedToMove;
-
-		} else {
-			// si l'unité a déja bougée mais est ce qu'elle peut encore se déplace
-
-			boolean canMoveAgain = strategy.canMoveAfterAttack(activeUnit, middleEarth.getTileAt(to),
-					turnsController.getMvtForActiveUnit());
-
-			isAllowedToMove = activeUnit.isAllowedToMove();
-
-			return isPosFree && isAccessible && canMoveAgain;
+			return false;
 		}
+
+		// si c'est le premier déplacement ?
+		if (activeUnit.isAllowedToMove()) {
+
+			return true;
+		}
+
+		// si c'est le 2nd déplacement on délègue le raisonnement à la stratégie
+		return activeUnit.getStrategy().canMoveAfterAttack(activeUnit, middleEarth.getTileAt(to), availableMvt);
 
 	}
 

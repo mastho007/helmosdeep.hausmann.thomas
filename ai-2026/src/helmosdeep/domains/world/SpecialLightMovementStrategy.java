@@ -8,15 +8,18 @@ public class SpecialLightMovementStrategy extends MovementStrategy{
 
 	
 	@Override
-	public boolean canMoveAfterAttack(Unit unit, Tile targetTile, int armyMvtAvailable) {
+	public boolean canMoveAfterAttack(Unit unit, Tile targetTile, int availableMvt) {
 		
+		//est ce que l'unité a déja attaqué durant le même tour ? 
+		boolean hasAttacked = unit.getPow() > 0;
+		
+		//le cout de la tuile ne doit pas dépasser la capital mouvement disponible
 		int cost = calculateMovementCost(targetTile);
 		
-		//on calcule les PM restants propres à l'unité
-		int uniteMvtRemaining = unit.getMvt() - unit.getMvtPointsConsumed();
+		boolean hasEnoughMvt = availableMvt >= cost;
 		
 		
-		return uniteMvtRemaining >= cost && armyMvtAvailable >= cost;
+		return hasAttacked && hasEnoughMvt;
 	}
 	
 	

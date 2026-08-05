@@ -102,6 +102,10 @@ public final class GameSupervisor implements GameViewListener, TileConsumer, Uni
 	@Override
 	public void onCancel() {
 		this.view.goTo(ViewsId.MAIN_MENU);		
+		
+		
+		
+		
 	}
 
 	@Override
