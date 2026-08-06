@@ -95,7 +95,7 @@ class ArmyListTest {
 	@Test
 	void should_throw_NullPointerException_when_put_called_with_null_position() {
 		assertThrows(NullPointerException.class,
-				() -> armyList.enroll(null, new Unit("Legolas", UnitType.LIGHT), Belligerent.MANKIND));
+				() -> armyList.enroll(null, new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy()), Belligerent.MANKIND));
 	}
 
 	@Test
@@ -106,12 +106,12 @@ class ArmyListTest {
 	@Test
 	void should_throw_NullPointerException_when_put_called_with_null_belligerent() {
 		assertThrows(NullPointerException.class,
-				() -> armyList.enroll(coord(3, 3), new Unit("Legolas", UnitType.LIGHT), null));
+				() -> armyList.enroll(coord(3, 3), new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy()), null));
 	}
 
 	@Test
 	void should_position_unit_in_matching_army_when_put_called_on_free_position() {
-		var legolas = new Unit("Legolas", UnitType.LIGHT);
+		var legolas = new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy());
 
 		armyList.enroll(coord(3, 3), legolas, Belligerent.MANKIND);
 
@@ -122,7 +122,7 @@ class ArmyListTest {
 
 	@Test
 	void should_not_position_unit_in_wrong_army_when_put_called() {
-		var legolas = new Unit("Legolas", UnitType.LIGHT);
+		var legolas = new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy());
 
 		armyList.enroll(coord(3, 3), legolas, Belligerent.MANKIND);
 
@@ -133,13 +133,13 @@ class ArmyListTest {
 	@Test
 	void should_throw_IllegalArgumentException_when_put_called_on_position_already_occupied_in_same_army() {
 		assertThrows(IllegalArgumentException.class,
-				() -> armyList.enroll(coord(0, 0), new Unit("Legolas", UnitType.LIGHT), Belligerent.MORDOR));
+				() -> armyList.enroll(coord(0, 0), new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy()), Belligerent.MORDOR));
 	}
 
 	@Test
 	void should_throw_IllegalArgumentException_when_put_called_on_position_already_occupied_in_other_army() {
 		assertThrows(IllegalArgumentException.class,
-				() -> armyList.enroll(coord(2, 2), new Unit("Legolas", UnitType.LIGHT), Belligerent.MORDOR));
+				() -> armyList.enroll(coord(2, 2), new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy()), Belligerent.MORDOR));
 	}
 
 	@Test
@@ -147,7 +147,7 @@ class ArmyListTest {
 		var soloList = new ArmyList(mordor);
 
 		assertThrows(IllegalArgumentException.class,
-				() -> soloList.enroll(coord(3, 3), new Unit("Legolas", UnitType.LIGHT), Belligerent.MANKIND));
+				() -> soloList.enroll(coord(3, 3), new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy()), Belligerent.MANKIND));
 	}
 
 	@Test

@@ -23,9 +23,9 @@ public final class ArmiesFactory {
 	public static Army createMordor() {
 		var mordor = Army.of(Belligerent.MORDOR);
 
-		mordor.enroll(coord(0,0), new Unit("Sauron", UnitType.GENERAL));
-		mordor.enroll(coord(1,0), new Unit("Orcs", UnitType.AVERAGE));
-		mordor.enroll(coord(0,1), new Unit("Wargs", UnitType.LIGHT));
+		mordor.enroll(coord(0,0), new Unit("Sauron", UnitType.GENERAL, new StandardLightMovementStrategy()));
+		mordor.enroll(coord(1,0), new Unit("Orcs", UnitType.AVERAGE, new StandardLightMovementStrategy()));
+		mordor.enroll(coord(0,1), new Unit("Wargs", UnitType.LIGHT, new StandardLightMovementStrategy()));
 
 		return mordor;
 	}
@@ -40,8 +40,8 @@ public final class ArmiesFactory {
 	public static Army createMankind() {
 		var mankind = Army.of(Belligerent.MANKIND);
 
-		mankind.enroll(coord(2,2), new Unit("Aragorn", UnitType.GENERAL));
-		mankind.enroll(coord(1,2), new Unit("Gondoriens", UnitType.AVERAGE));
+		mankind.enroll(coord(2,2), new Unit("Aragorn", UnitType.GENERAL, new StandardLightMovementStrategy()));
+		mankind.enroll(coord(1,2), new Unit("Gondoriens", UnitType.AVERAGE, new StandardLightMovementStrategy()));
 
 		return mankind;
 	}

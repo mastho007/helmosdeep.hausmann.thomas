@@ -30,8 +30,8 @@ class ArmyTest {
 	void should_allow_to_fight_when_there_are_a_general_and_another_unit() {
 		var army = Army.of(Belligerent.MORDOR);
 		
-		army.enroll(coord(0,0), new Unit("S", UnitType.GENERAL));
-		army.enroll(coord(1,0), new Unit("G", UnitType.LIGHT));
+		army.enroll(coord(0,0), new Unit("S", UnitType.GENERAL, new StandardLightMovementStrategy()));
+		army.enroll(coord(1,0), new Unit("G", UnitType.LIGHT, new StandardLightMovementStrategy()));
 		
 		assertTrue(army.canFight());
 	}
@@ -40,7 +40,7 @@ class ArmyTest {
 	void should_disallow_to_fight_when_you_have_only_a_general() {
 		var army = Army.of(Belligerent.MORDOR);
 		
-		army.enroll(coord(0,0), new Unit("S", UnitType.GENERAL));
+		army.enroll(coord(0,0), new Unit("S", UnitType.GENERAL, new StandardLightMovementStrategy()));
 		
 		assertFalse(army.canFight());
 	}
@@ -48,7 +48,7 @@ class ArmyTest {
 	void should_disallow_to_fight_when_you_have_only_a_unit() {
 		var army = Army.of(Belligerent.MORDOR);
 		
-		army.enroll(coord(0,0), new Unit("G", UnitType.AVERAGE));
+		army.enroll(coord(0,0), new Unit("G", UnitType.AVERAGE, new StandardLightMovementStrategy()));
 		
 		assertFalse(army.canFight());
 	}
@@ -56,22 +56,22 @@ class ArmyTest {
 	@Test
 	void should_empeach_enrolling_on_duplication() {
 		var army = Army.of(Belligerent.MORDOR);
-		var general = new Unit("S", UnitType.GENERAL);
-		var lieutenant  = new Unit("L", UnitType.LIGHT);
+		var general = new Unit("S", UnitType.GENERAL, new StandardLightMovementStrategy());
+		var lieutenant  = new Unit("L", UnitType.LIGHT, new StandardLightMovementStrategy());
 		army.enroll(coord(0,0), general);
 		army.enroll(coord(1,1), lieutenant);
 		
-		assertThrows(IllegalArgumentException.class, () -> army.enroll(coord(0, 0), new Unit("G", UnitType.HEAVY)));
+		assertThrows(IllegalArgumentException.class, () -> army.enroll(coord(0, 0), new Unit("G", UnitType.HEAVY, new StandardLightMovementStrategy())));
 		assertThrows(IllegalArgumentException.class, () -> army.enroll(coord(1, 0), general));
-		assertThrows(IllegalArgumentException.class, () -> army.enroll(coord(1, 0),  new Unit("S²", UnitType.GENERAL)));
+		assertThrows(IllegalArgumentException.class, () -> army.enroll(coord(1, 0),  new Unit("S²", UnitType.GENERAL, new StandardLightMovementStrategy())));
 		assertThrows(IllegalArgumentException.class, () -> army.enroll(coord(1, 0),  lieutenant));
 	}
 	
 	@Test
 	void should_return_an_unit_from_a_coordinate() {
 		var army = Army.of(Belligerent.MORDOR);
-		var general = new Unit("S", UnitType.GENERAL);
-		var lieutenant  = new Unit("L", UnitType.LIGHT);
+		var general = new Unit("S", UnitType.GENERAL, new StandardLightMovementStrategy());
+		var lieutenant  = new Unit("L", UnitType.LIGHT, new StandardLightMovementStrategy());
 		army.enroll(coord(0,0), general);
 		army.enroll(coord(1,1), lieutenant);
 		
@@ -96,7 +96,7 @@ class ArmyTest {
 	@Test
 	void should_clamp_a_unit_mvt_to_the_army_mvt() {
 		var mordor = Army.of(Belligerent.MORDOR);
-		mordor.enroll(coord(0,0), new Unit("Sauron", UnitType.GENERAL));
+		mordor.enroll(coord(0,0), new Unit("Sauron", UnitType.GENERAL, new StandardLightMovementStrategy()));
 		
 		assertEquals("1", mordor.resolve(":mvt:"));
 		assertEquals(1, mordor.getMvtForUnitAt(coord(0,0)));
@@ -203,7 +203,7 @@ class ArmyTest {
 	@Test
 	void should_compute_power_with_no_allies_nearby() {
 		var army = Army.of(Belligerent.MORDOR);
-		army.enroll(coord(0,0), new Unit("Solo", UnitType.LIGHT));
+		army.enroll(coord(0,0), new Unit("Solo", UnitType.LIGHT, new StandardLightMovementStrategy()));
 
 		army.computePowerAt(coord(0,0), 2);
 

@@ -14,22 +14,23 @@ class UnitTest {
 
 	@BeforeEach
 	void setUp() {
-		unit = new Unit("Aragorn", UnitType.GENERAL);
+		unit = new Unit("Aragorn", UnitType.GENERAL, new StandardLightMovementStrategy());
 	}
 
 	@Test
 	void should_throw_exception_when_name_is_null() {
-		assertThrows(NullPointerException.class, () -> new Unit(null, UnitType.AVERAGE));
+		assertThrows(NullPointerException.class,
+				() -> new Unit(null, UnitType.AVERAGE, new StandardLightMovementStrategy()));
 	}
 
 	@Test
 	void should_throw_exception_when_type_is_null() {
-		assertThrows(NullPointerException.class, () -> new Unit("Boromir", null));
+		assertThrows(NullPointerException.class, () -> new Unit("Boromir", null, new StandardLightMovementStrategy()));
 	}
 
 	@Test
 	void should_create_unit_with_no_power_and_not_moved_when_instantiated() {
-		var newUnit = new Unit("Legolas", UnitType.LIGHT);
+		var newUnit = new Unit("Legolas", UnitType.LIGHT, new StandardLightMovementStrategy());
 
 		assertEquals(0, newUnit.getPow());
 		assertTrue(newUnit.isAllowedToMove());
@@ -52,14 +53,14 @@ class UnitTest {
 
 	@Test
 	void should_return_type_strength_when_called() {
-		var lightUnit = new Unit("Wargs", UnitType.LIGHT);
+		var lightUnit = new Unit("Wargs", UnitType.LIGHT, new StandardLightMovementStrategy());
 
 		assertEquals(1, lightUnit.getStr());
 	}
 
 	@Test
 	void should_return_type_movement_when_called() {
-		var lightUnit = new Unit("Wargs", UnitType.LIGHT);
+		var lightUnit = new Unit("Wargs", UnitType.LIGHT, new StandardLightMovementStrategy());
 
 		assertEquals(4, lightUnit.getMvt());
 	}
@@ -78,15 +79,14 @@ class UnitTest {
 
 	@Test
 	void should_be_allowed_to_attack_when_unit_is_general_and_power_has_not_been_set_yet() {
-		var averageUnit = new Unit("Gondoriens", UnitType.AVERAGE);
-
+		var averageUnit = new Unit("Gondoriens", UnitType.AVERAGE, new StandardLightMovementStrategy());
 
 		assertTrue(averageUnit.isAllowedToAttack());
 	}
 
 	@Test
 	void should_not_be_allowed_to_attack_when_power_has_been_set_or_unit_is_general() {
-		var averageUnit = new Unit("Gondoriens", UnitType.AVERAGE);
+		var averageUnit = new Unit("Gondoriens", UnitType.AVERAGE, new StandardLightMovementStrategy());
 		averageUnit.setPower(2);
 
 		assertFalse(averageUnit.isAllowedToAttack());
@@ -128,7 +128,7 @@ class UnitTest {
 
 	@Test
 	void should_reset_power_to_zero_when_called() {
-		var averageUnit = new Unit("Gondoriens", UnitType.AVERAGE);
+		var averageUnit = new Unit("Gondoriens", UnitType.AVERAGE, new StandardLightMovementStrategy());
 		averageUnit.setPower(3);
 
 		averageUnit.resetState();

@@ -80,6 +80,8 @@ class MiddleEarthTest {
 	@Test
 	void should_compute_minimal_cost_between_two_coords() {
 		var md = MiddleEarth.create();
+		Unit uniteUn = new Unit("Orcs", UnitType.AVERAGE, new StandardLightMovementStrategy());
+		Unit uniteDeux =  new Unit("Trolls", UnitType.HEAVY, new StandardHeavyMovementStrategy());
 		md.put(coord(0, 0), Tile.LOWLAND);
 		md.put(coord(0, 1), Tile.LOWLAND);
 		md.put(coord(0, 2), Tile.LOWLAND);
@@ -90,16 +92,19 @@ class MiddleEarthTest {
 		md.put(coord(2, 1), Tile.MOUNTAIN);
 		md.put(coord(2, 2), Tile.MOUNTAIN);
 		
-		assertEquals(0, md.computeMoveCostFor(1, coord(0,0), coord(0,0)));
-		assertEquals(1, md.computeMoveCostFor(1, coord(0,0), coord(0,1)));
-		assertEquals(6, md.computeMoveCostFor(8, coord(0,0), coord(2,2)));
-		assertEquals(5, md.computeMoveCostFor(8, coord(0,1), coord(2,2)));
-		assertEquals(Integer.MAX_VALUE, md.computeMoveCostFor(0, coord(0,0), coord(0,1)));
+		assertEquals(0, md.computeMoveCostFor(1, coord(0,0), coord(0,0), uniteUn));
+		assertEquals(1, md.computeMoveCostFor(1, coord(0,0), coord(0,1), uniteUn));
+		assertEquals(6, md.computeMoveCostFor(8, coord(0,0), coord(2,2), uniteUn));
+		assertEquals(5, md.computeMoveCostFor(8, coord(0,1), coord(2,2), uniteDeux));
+		assertEquals(Integer.MAX_VALUE, md.computeMoveCostFor(0, coord(0,0), coord(0,1), uniteUn));
 	}
 	
 	@Test
 	void should_reject_absent_coordinate() {
+		
+		Unit uniteUn = new Unit("Orcs", UnitType.AVERAGE, new StandardLightMovementStrategy());
 		var md = MiddleEarth.create();
+		
 		md.put(coord(0, 0), Tile.LOWLAND);
 		md.put(coord(0, 1), Tile.LOWLAND);
 		md.put(coord(0, 2), Tile.LOWLAND);
@@ -110,7 +115,7 @@ class MiddleEarthTest {
 		md.put(coord(2, 1), Tile.MOUNTAIN);
 		md.put(coord(2, 2), Tile.MOUNTAIN);
 		
-		assertThrows(IllegalArgumentException.class, () -> md.computeMoveCostFor(5, coord(-1, 0), coord(2,2)));
-		assertThrows(IllegalArgumentException.class, () -> md.computeMoveCostFor(5, coord(1, 1), coord(3,2)));
+		assertThrows(IllegalArgumentException.class, () -> md.computeMoveCostFor(5, coord(-1, 0), coord(2,2), uniteUn));
+		assertThrows(IllegalArgumentException.class, () -> md.computeMoveCostFor(5, coord(1, 1), coord(3,2), uniteUn));
 	}
 }
