@@ -63,15 +63,15 @@ public class MainMenuSupervisor implements MainMenuListener {
 		// on détermine si on se trouve dans le menu principal ou le menu option
 		if (!gameOption.isModeOption()) {
 
-			this.view.setItems("Menu principal", "Nouvelle partie", "Règles Spécifiques", "Quitter");
+			this.view.setItems("Menu principal", "Nouvelle partie", "Regles specifiques", "Quitter");
 
 		} else {
 			// on passe dans le menu d'option
 			// on récupère les choix fait
-			String optionLourde = (this.gameOption.getOptionHeavy() == true) ? "Unités lourdes [x]"
-					: "Unités lourdes []";
-			String optionLegere = (this.gameOption.getOptionLight() == true) ? "Unités légères [x]"
-					: "Unités légères []";
+			String optionLourde = (this.gameOption.getOptionHeavy() == true) ? "[x] Unites lourdes"
+					: "[ ] Unites lourdes";
+			String optionLegere = (this.gameOption.getOptionLight() == true) ? "[x] Unites legeres"
+					: "[ ] Unites legeres";
 
 			this.view.setItems("Règles Spécifiques", optionLourde, optionLegere, "Retour au menu principal");
 
@@ -105,7 +105,7 @@ public class MainMenuSupervisor implements MainMenuListener {
 		} else {
 			// si l'utilisateur est dans le mode option
 			manageSelectionOptionMenu(itemIndex);
-			
+
 		}
 
 	}
@@ -127,10 +127,8 @@ public class MainMenuSupervisor implements MainMenuListener {
 		if (itemIndex == NEW_GAME_ITEM) {
 
 			// l'objet HelmoDeepGame est créé depuis la factory
-			gameFactory.create(this.gameOption);
 			// on récupère l'objet GameOption
-			
-			
+			gameFactory.create(this.gameOption);
 
 			view.goTo(ViewsId.PLAY_GAME);
 

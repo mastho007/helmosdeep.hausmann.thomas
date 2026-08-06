@@ -5,6 +5,7 @@ import java.util.Objects;
 import helmosdeep.domains.turns.TurnsController;
 import helmosdeep.domains.world.MiddleEarth;
 import helmosdeep.domains.world.MovementStrategy;
+import helmosdeep.domains.world.SpecialLightMovementStrategy;
 
 /**
  * Action déplaçant l'unité actuellement sélectionnée depuis sa position de
@@ -70,7 +71,7 @@ public final class MoveAction implements Action {
 	 * ;</li>
 	 * <li>l'unité sélectionnée peut encore se déplacer ce tour-ci.</li>
 	 * <li>l'unité sélectionnée est une unité légère dont l'option "unités légères"
-	 * a été sélectionnée et vérifie les points précédents.</li>
+	 * et si elle correspond au conditions dans {@link SpecialLightMovementStrategy#canMoveAfterAttack()}.</li>
 	 * </ul>
 	 *
 	 * <p>
@@ -99,7 +100,6 @@ public final class MoveAction implements Action {
 
 		final var isAccessible = 0 < mvtConsumed && mvtConsumed < Integer.MAX_VALUE;
 
-		
 		// si la case de la coordonnée courante n'est pas vide OU
 		// que la case n'est pas accessible -> false
 		if (!isPosFree || !isAccessible) {

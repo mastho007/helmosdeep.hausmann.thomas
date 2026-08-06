@@ -89,12 +89,22 @@ public class SelectedUnitHistory {
 		// sommet n'est pas dans l'armée active -> sinon on supprime l'unité au
 		// sommet de la pile
 		while (this.historySelection.size() > ONE_UNIT
-				&& activeArmy.locateUnit(this.historySelection.peek()) == Coordinate.NONE) {
+				&& activeArmy.locateUnit(this.historySelection.peek()).equals(Coordinate.NONE)) {
 
 			this.historySelection.pop();
 		}
 
-		return this.historySelection.peek();
+		// si il ne reste plus qu'un élément dans la pile -> on retourne le général de
+		// l'armée active
+		Unit topUnit = this.historySelection.peek();
+		
+		if(topUnit == null || activeArmy.locateUnit(topUnit).equals(Coordinate.NONE)) {
+			
+			return activeArmy.getGeneral();
+		}
+		
+		
+		return topUnit;
 	}
 
 }

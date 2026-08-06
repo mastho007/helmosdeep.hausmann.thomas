@@ -101,10 +101,13 @@ public final class GameSupervisor implements GameViewListener, TileConsumer, Uni
 
 	@Override
 	public void onCancel() {
-		this.view.goTo(ViewsId.MAIN_MENU);		
 		
+		//on appel pour récupérer l'unité précédemment sélectionné
+		this.currentGame.rollbackSelection();
 		
-		
+		//on met à jour le panneau de status et la camera
+		this.updateStatusPanel();
+		this.updateCamera();
 		
 	}
 
