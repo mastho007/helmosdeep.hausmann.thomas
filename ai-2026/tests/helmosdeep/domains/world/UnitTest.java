@@ -135,4 +135,109 @@ class UnitTest {
 
 		assertEquals(0, averageUnit.getPow());
 	}
+	
+	
+	@Test
+	void should_throw_exeption_when_the_strategy_in_the_constructor_is_null() {
+		
+		assertThrows(NullPointerException.class, () -> new Unit("Wargs", UnitType.AVERAGE, null));
+		
+	}
+	
+	
+	@Test
+	void should_return_the_exact_strategy() {
+		
+		Unit unit = new Unit("Wargs", UnitType.AVERAGE, new StandardLightMovementStrategy());
+		
+		assertTrue(unit.getStrategy() instanceof StandardLightMovementStrategy);
+		
+	}
+		
+	
+	
+	
+	@Test
+	void should_return_One_cost_of_movement_for_a_special_heavy_unit() {
+		
+		Unit unit = new Unit("Trolls", UnitType.HEAVY, new SpecialHeavyMovementStrategy());
+		
+		assertEquals(1, unit.getStrategy().calculateMovementCost(Tile.FOREST));
+		
+	}
+	
+
+	
+	@Test
+	void should_start_at_zero_movement_points_consumed_for_the_initialization() {
+		
+		Unit unit = new Unit("Trolls", UnitType.HEAVY, new SpecialHeavyMovementStrategy());
+		
+		assertEquals(0, unit.getMvtPointsConsumed());
+		
+	}
+	
+	@Test
+	void should_return_three_when_we_add_Two_and_One_for_the_movement_points_consumed() {
+		
+		Unit unit = new Unit("Trolls", UnitType.HEAVY, new SpecialHeavyMovementStrategy());
+		
+		unit.addMvtPointsConsumed(2);
+		unit.addMvtPointsConsumed(1);
+		
+		assertEquals(3, unit.getMvtPointsConsumed());
+		
+	}
+	
+	@Test
+	void should_reset_the_points_consumed_when_reset_method_is_called() {
+		
+		Unit unit = new Unit("Trolls", UnitType.HEAVY, new SpecialHeavyMovementStrategy());
+		
+		unit.addMvtPointsConsumed(2);
+		unit.addMvtPointsConsumed(1);
+		
+		unit.resetState();
+		
+		assertEquals(0, unit.getMvtPointsConsumed());
+		
+	}
+	
+	
+	@Test
+	void should_return_false_for_a_movement_after_set_the_power() {
+		
+		Unit unit = new Unit("Trolls", UnitType.HEAVY, new SpecialHeavyMovementStrategy());
+		
+		assertTrue(unit.isAllowedToMove());
+		
+		unit.setPower(10);
+		
+		assertFalse(unit.isAllowedToMove());
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

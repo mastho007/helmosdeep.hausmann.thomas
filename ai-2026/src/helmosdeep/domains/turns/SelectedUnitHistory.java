@@ -97,13 +97,12 @@ public class SelectedUnitHistory {
 		// si il ne reste plus qu'un élément dans la pile -> on retourne le général de
 		// l'armée active
 		Unit topUnit = this.historySelection.peek();
-		
-		if(topUnit == null || activeArmy.locateUnit(topUnit).equals(Coordinate.NONE)) {
-			
+
+		if (topUnit == null || activeArmy.locateUnit(topUnit).equals(Coordinate.NONE)) {
+
 			return activeArmy.getGeneral();
 		}
-		
-		
+
 		return topUnit;
 	}
 

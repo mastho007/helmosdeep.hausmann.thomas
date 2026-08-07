@@ -66,13 +66,9 @@ class MovementStrategyTest {
 		assertFalse(unit.getStrategy().canMoveAfterAttack(unit, Tile.MOUNTAIN, 2),
 				"Doit retourner false car l'unité(avec l'armée) n'a pas assez de points de mouvement disponibles.");
 
-		
-		
-		
-		
-		
-		
-		
+		assertTrue(unit.getStrategy().canMoveAfterAttack(unit, Tile.LOWLAND, 1),
+				"Doit retourner true car l'unité(avec l'armée) a juste assez de points de mouvement disponibles.");
+
 	}
 
 }
