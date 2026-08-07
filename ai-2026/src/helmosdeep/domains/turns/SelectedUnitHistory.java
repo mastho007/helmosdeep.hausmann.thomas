@@ -15,6 +15,53 @@ import helmosdeep.util.Contract;
  * <ul>
  * <li>Stocker les unités sélectionnées durant le tour courant</li>
  * </ul>
+ * <br>
+ * It-4-q1 : <br>
+ * 
+ * <ol>
+ * <li>Quelle règle du jeu garantit qu'une armée ne peut pas perdre son général
+ * durant son propre tour ?</li>
+ * 
+ * <ul>
+ * <li>Absence de contre-attaque durant le tour courant : <br>
+ * Pendant le tour courant les unités de l'armée active peuvent se déplacer ou
+ * attaquer les unités de l'autre armée, ainsi l'armée active peut perdre des
+ * unités ou pas, à l'exeption du général de l'armée active qui lui ne peut pas
+ * attaquer.<br>
+ * </li>
+ * 
+ * <li>La défaite immédiate : <br>
+ * Si le général est éliminé (l'armée active tue le général de l'armée énemmie),
+ * lorsque l'utilisateur change de tour, la partie prend fin instantanément. Par
+ * conséquent, au moment ou un tour commence, l'armée active possède un général
+ * en vie et présent sur le plateau.</li>
+ * </ul>
+ * 
+ * 
+ * <li>Quel est l'invariant de classe respecté par l'historique durant tout le
+ * tour ?</li>
+ * 
+ * 
+ * <ul>
+ * <li>L'invariant sur la taille et le contenu de base :<br>
+ * 
+ * <ul>
+ * <li>historySelection.size() >= 1 : La collection historySelection n'est
+ * jamais vide au cours d'un tour.</li>
+ * <li>Base du général : Le premier élément du bas de la pile contient toujours
+ * le général de l'armée active(et bien sur vivant).</li>
+ * </ul>
+ * 
+ * </li>
+ * 
+ * <li>L'invariant sur la validité des éléments empilés :<br>
+ * Tous les éléments contenus dans la pile sont non null et sont différents de
+ * Unit.UNKNOWN</li>
+ * 
+ * 
+ * </ul>
+ * 
+ * </ol>
  * 
  */
 public class SelectedUnitHistory {

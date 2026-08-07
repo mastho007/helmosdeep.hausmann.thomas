@@ -110,6 +110,23 @@ class SelectedUnitHistoryTest {
 	
 	
 	
+	@Test
+	void should_return_active_army_general_when_history_contains_only_general() {
+
+		this.selectedUnitHistory.reset(new Unit("Sauron", UnitType.GENERAL, new StandardHeavyMovementStrategy()));
+
+		
+		assertEquals("Sauron", this.selectedUnitHistory.getPreviousValidUnit().getName());
+
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
