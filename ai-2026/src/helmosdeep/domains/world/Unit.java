@@ -6,18 +6,70 @@ import helmosdeep.util.Contract;
 
 /**
  * Représente une unité militaire pouvant enrollable dans une armée et déployée
- * sur le plateau.
+ * sur le plateau.<br>
  *
- * <p>
- * Une unité possède un nom, un type ({@link UnitType}) déterminant sa force
- * ({@code str}) et sa mobilité potentielle ({@code mvt}), ainsi qu'un état
- * mutable propre à chaque tour de jeu : si elle a déjà effectué un déplacement
- * ({@code moved}), et une puissance d'attaque courante ({@code pow}), fixée
- * lors de la résolution d'un combat.
+ * Une unité possède :
+ * <ul>
+ * <li>Une unité possède un nom ({@code name}).</li>
+ * <li>Un type ({@link UnitType}) déterminant sa force ({@code str}) et sa
+ * mobilité potentielle ({@code mvt}).</li>
+ * <li>Un état mutable propre à chaque tour de jeu : si elle a déjà effectué un
+ * déplacement ({@code moved}).</li>
+ * <li>Une puissance d'attaque courante ({@code pow}), fixée lors de la
+ * résolution d'un combat..</li>
+ * <li>Une stratégie propre qui détermine sont comportement dans le jeu selon
+ * les options du jeu choisies..</li>
+ * <li>L'unité contient le nombre de points de mouvement consommé par l'unité au
+ * cour d'un tour courant ({@code mvtPointsConsumed}).</li>
+ * </ul>
  *
- * <p>
  * Cet état ({@code moved} et {@code pow}) est remis à zéro en début de tour via
- * {@link #resetState()}.
+ * {@link #resetState()}. <br>
+ * <br>
+ * 
+ * <strong>It-4-q2 postcondition de la méthode
+ * ({@code getMoveCostFor(Tile tile)}):</strong>
+ * 
+ * <ol>
+ * <li>Postcondition formelle :</li>
+ * 
+ * 
+ * <ul>
+ * <li>Si l'unité utilise la stratégie spéciale
+ * ({@code SpecialHeavyMovementStrategy}) :</li>
+ * 
+ * Le coût de déplacement est réduit à 1, quel que soit le type de terrain
+ * ciblé.
+ * 
+ * <li>Dans tous les autres types de stratégies :</li>
+ * 
+ * le cout est déterminé comme {@code cost = tile.getCost()}, le coût retourné
+ * est égal au coût du type de tuile de destination.
+ * 
+ * </ul>
+ * 
+ * 
+ * <li>Invariant et borne du resultat :</li>
+ * 
+ * En plus de la logique de stratégie, la postcondition vérifie ces propriétés :
+ * <ul>
+ * <li>Strictement positif ({@code cost >= 1}):</li>
+ * 
+ * Déplacer une unité consomme au minimum 1 point de mouvement, un cout nul ou
+ * négatif est impossible.
+ * 
+ * <li>Intervalle de coût ({@code 1 <= cost <= tile.getCost()}):</li>
+ * 
+ * le coût calculé ne peut jamais dépasser le coût standard de la tuile, ni être
+ * inférieur à 1.
+ * 
+ * <li>Consistance:</li> L'état de l'unité et l'état de la tuile ne sont pas
+ * modifiés par cet appel.
+ * </ul>
+ * 
+ * 
+ * </ol>
+ * 
  */
 public final class Unit {
 
@@ -136,16 +188,16 @@ public final class Unit {
 		return this.pow;
 	}
 
-	
 	/**
-	 * Récupère la stratégie de l'unité en question 
+	 * Récupère la stratégie de l'unité en question
+	 * 
 	 * @return l'objet qui contient la stratégie de l'unité
 	 */
 	public MovementStrategy getStrategy() {
-		
+
 		return this.strategy;
 	}
-	
+
 	/**
 	 * Vérifie si cette unité est autorisée à se déplacer, c'est-à-dire si elle ne
 	 * s'est pas déjà déplacée durant le tour courant.
@@ -189,10 +241,7 @@ public final class Unit {
 		Contract.require(newPower > 0, "Arg. newPow > 0 attendu. Recu " + newPower);
 		this.pow = newPower;
 
-		
-
-			this.moved = true;
-		
+		this.moved = true;
 
 	}
 
