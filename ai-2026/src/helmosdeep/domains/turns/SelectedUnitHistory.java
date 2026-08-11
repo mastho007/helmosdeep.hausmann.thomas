@@ -58,10 +58,79 @@ import helmosdeep.util.Contract;
  * Tous les éléments contenus dans la pile sont non null et sont différents de
  * Unit.UNKNOWN</li>
  * 
+ * </ul>
+ * </ol>
+ * 
+ * <strong>It-4-q4 :</strong>
+ * 
+ * <ol>
+ * 
+ * <li>Choix de l'interface de collection : {@code Deque<Unit>}</li>
+ * 
+ * Pour gérer l'historique des unités sélectionnées, l'interface
+ * {@code Deque<E>} est celle qui convient le mieux car on cherche un
+ * comportement LIFO(Last In, First Out) :
+ * <ul>
+ * <li>Lorsqu'une unité est sélectionnée, on l'ajoute au sommet de la pile.</li>
+ * <li>Lorsqu'un joueur annule une sélection, on retire la dernière unité
+ * sélectionnée pour revenir à la précédente valide.</li>
+ * </ul>
+ * 
+ * Opérations nécessaire dans ce cas :
+ * 
+ * <ul>
+ * <li>Accès par clé/index :</li>
+ * 
+ * Non, ici il n'y a pas besoin d'avoir accès à un élément au millieu de
+ * l'historique par exemple (on n'a pas besoin ici d'avoir des paires
+ * clé/indentifiant comme dans une Map).
+ * 
+ * 
+ * <li>Unicité :</li>
+ * 
+ * Non, il n'est pas nécessaire d'utiliser un {@code Set}, car une même unité
+ * peut être sélectionnée plusieurs fois au cours d'un tour.
+ * 
+ * <li>Opérations principales nécessaires :</li>
+ * 
+ * <ol>
+ * <li>Empiler une nouvelle unité sélectionnée ({@code push(unit)})</li>
+ * <li>Dépiler la dernière unité sélectionnée ({@code pop()})</li>
+ * <li>Consulter l'unité courante au sommet de la pile sans la retirer
+ * ({@code peek()})</li>
+ * <li>Vider l'historique au début du tour ({@code clear()})</li>
+ * </ol>
+ * 
  * 
  * </ul>
  * 
+ * 
+ * 
+ * <li>Choix de l'implémentation : {@code ArrayDeque<Unit>}</li>
+ * 
+ * En comparaison avec {@code LinkedList}, ici pas besoin de créé des
+ * {@code Node} car permet d'être plus performant en mémoire.
+ * 
+ * 
+ * <li>Analyse des CTT des opérations utilisées :</li>
+ * 
+ * <ul>
+ * <li>{@code push(unit)}, empile une nouvelle unité dans la pile -> O(1).</li>
+ * <li>{@code pop()}, retire une unité au sommet de la pile -> O(1).</li>
+ * <li>{@code peek()}, consulte l'unité au sommet sans la retirer -> O(1).</li>
+ * <li>{@code clear()}, vide la pile lors d'un {@code reset(general)} -> O(n)
+ * avec n le nombre d'éléments.</li>
+ * </ul>
+ * 
+ * 
  * </ol>
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  */
 public class SelectedUnitHistory {
